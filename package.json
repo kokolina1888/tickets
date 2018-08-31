@@ -12,10 +12,22 @@
     "devDependencies": {
         "axios": "^0.17",
         "bootstrap-sass": "^3.3.7",
+        "buble-loader": "^0.5.1",
         "cross-env": "^5.1",
+        "gulp": "^3.9.1",
         "jquery": "^3.2",
+        "laravel-elixir": "^6.0.0-18",
+        "laravel-elixir-vue-2": "^0.3.0",
+        "laravel-elixir-webpack-official": "^1.0.10",
         "laravel-mix": "^1.0",
         "lodash": "^4.17.4",
         "vue": "^2.5.7"
+    },
+    "dependencies": {
+        "es6-promise": "^4.2.4",
+        "normalize.css": "^8.0.0",
+        "suitcss-base": "^4.0.0",
+        "vue-loader": "^14.2.3",
+        "vue-template-compiler": "^2.5.16"
     }
 }

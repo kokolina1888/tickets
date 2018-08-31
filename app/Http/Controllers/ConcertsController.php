@@ -9,6 +9,7 @@ class ConcertsController extends Controller
 {
     public function show($id)
     {
-    	return view('concerts.show', ['concert' => Concert::find($id)]);
+        $concert = Concert::published()->findOrFail($id);
+        return view('concerts.show', ['concert' => $concert]);
     }
 }
