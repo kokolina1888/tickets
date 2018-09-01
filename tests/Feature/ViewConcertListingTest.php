@@ -1,7 +1,9 @@
 <?php
+namespace Tests\Feature;
+
+use Tests\TestCase;
 use App\Concert;
 use Carbon\Carbon;
-use Tests\TestCase;
 use Illuminate\Foundation\Testing\WithoutMiddleware;
 use Illuminate\Foundation\Testing\DatabaseMigrations;
 use Illuminate\Foundation\Testing\DatabaseTransactions;
@@ -27,6 +29,7 @@ class ViewConcertListingTest extends TestCase
             ]);
         // Act
         // View the concert listing
+        
         $this->get('/concerts/'.$concert->id)
         // Assert
         // // See the concert details
@@ -44,8 +47,10 @@ class ViewConcertListingTest extends TestCase
     /** @test */
     function user_cannot_view_unpublished_concert_listings()
     {
-        $concert = factory(Concert::class)->states('unpublished')->create();
+        // $this->withoutExceptionHandling();
 
+        $concert = factory(Concert::class)->states('unpublished')->create();
+        
         $this->get('/concerts/'.$concert->id)
         ->assertStatus(404);
     }
