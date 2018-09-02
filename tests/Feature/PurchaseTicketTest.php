@@ -35,6 +35,13 @@ class PurchaseTicketTest extends TestCase
             ]);
         // Assert
         $response->assertStatus(201);
+       $response->assertJson([
+                    'email' => 'john@example.com',
+                   'ticket_quantity' => 3,
+                   'amount' => 9750
+                   ]);
+
+        // $this->assertJson($response->data);
         // Make sure the customer was charged the correct amount
         $this->assertEquals(9750, $this->paymentGateway->totalCharges());
         // Make sure that an order exists for this customer
@@ -150,7 +157,7 @@ class PurchaseTicketTest extends TestCase
         // dd($response);
     $response->assertStatus(422);
     $this->assertFalse($concert->hasOrderFor('john@example.com'));
-    
+
     $this->assertEquals(0, $this->paymentGateway->totalCharges());
     $this->assertEquals(50, $concert->ticketsRemaining());
 }
