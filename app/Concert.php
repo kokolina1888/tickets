@@ -40,7 +40,7 @@ class Concert extends Model
         if ($tickets->count() < $ticketQuantity) {
             throw new NotEnoughTicketsException;
         }
-        
+
         $order = $this->orders()->create(['email' => $email]);
 
         
@@ -59,9 +59,20 @@ class Concert extends Model
         foreach (range(1, $quantity) as $i) {
             $this->tickets()->create([]);
         }
+        
+        return $this;
     }
     public function ticketsRemaining()
     {
         return $this->tickets()->available()->count();
+    }
+
+    public function hasOrderFor($customerEmail)
+    {
+        return $this->orders()->where('email', $customerEmail)->count() > 0;
+    }
+    public function ordersFor($customerEmail)
+    {
+        return $this->orders()->where('email', $customerEmail)->get();
     }
 }

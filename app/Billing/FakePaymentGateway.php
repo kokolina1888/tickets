@@ -7,6 +7,7 @@ class FakePaymentGateway implements PaymentGateway
     private $charges;
     public function __construct()
     {
+        // dd($this->charges);
         $this->charges = collect();
     }
     public function getValidTestToken()
@@ -15,6 +16,7 @@ class FakePaymentGateway implements PaymentGateway
     }
     public function charge($amount, $token)
     {
+        // dd( $this->charges);
         if ($token !== $this->getValidTestToken()) {
 
             throw new PaymentFailedException;
@@ -22,9 +24,12 @@ class FakePaymentGateway implements PaymentGateway
         }
 
         $this->charges[] = $amount;
+
+
     }
     public function totalCharges()
     {
+        // dd($this->charges);
         return $this->charges->sum();
     }
 }
