@@ -33,12 +33,24 @@ class Order extends Model
 	}
 
 	public function toArray()
-    {
-        return [
-            'email' => $this->email,
-            'ticket_quantity' => $this->ticketQuantity(),
-            'amount' => $this->ticketQuantity() * $this->concert->ticket_price,
-        ];
-    }
+	{
+		return [
+		'email' => $this->email,
+		'ticket_quantity' => $this->ticketQuantity(),
+		'amount' => $this->amount,
+		];
+	}
+	public static function forTickets($tickets, $email, $amount)
+	{
+		$order = self::create([
+			'email' => $email,
+			'amount' => $amount,
+			]);
+		foreach ($tickets as $ticket) {
+			$order->tickets()->save($ticket);
+		}
+		return $order;
+	}
+
 
 }

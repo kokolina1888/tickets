@@ -1,5 +1,6 @@
 <?php
 namespace App\Http\Controllers;
+use App\Order;
 use App\Concert;
 use Illuminate\Http\Request;
 use App\Billing\PaymentGateway;
@@ -19,13 +20,18 @@ class ConcertOrdersController extends Controller
             'email' => ['required', 'email'],
             'ticket_quantity' => ['required', 'integer', 'min:1'],
             'payment_token' => ['required'],
-        ]);
+            ]);
         try {
-            $order = $concert->orderTickets(request('email'), request('ticket_quantity'));
-            $this->paymentGateway->charge(request('ticket_quantity') * $concert->ticket_price, request('payment_token'));
-             return response()->json($order, 201);  
+         
+            $tickets = $concert->findTickets(request('ticket_quantity'));
+            $this->paymentGateway->charge($tickets->sum('price'), request('payment_token'));
+
+            
+            $order = Order::forTickets($tickets, request('email'), $tickets->sum('price'));
+            return response()->json($order, 201);
+
         } catch (PaymentFailedException $e) {
-            $order->cancel();
+            
             return response()->json([], 422);
         } catch (NotEnoughTicketsException $e) {
             return response()->json([], 422);

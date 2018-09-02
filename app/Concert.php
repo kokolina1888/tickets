@@ -2,6 +2,7 @@
 
 namespace App;
 
+use App\Order;
 use Illuminate\Database\Eloquent\Model;
 use App\Exceptions\NotEnoughTicketsException;
 
@@ -29,29 +30,47 @@ class Concert extends Model
     {
         return number_format($this->ticket_price / 100, 2);
     }
+
     public function orders()
     {
-        return $this->hasMany('App\Order');
+        return $this->belongsToMany(Order::class, 'tickets');
+    }
+
+    public function hasOrderFor($customerEmail)
+    {
+        return $this->orders()->where('email', $customerEmail)->count() > 0;
+    }
+
+    public function ordersFor($customerEmail)
+    {
+        return $this->orders()->where('email', $customerEmail)->get();
+    }
+
+    public function tickets()
+    {
+        return $this->hasMany(Ticket::class);
     }
 
     public function orderTickets($email, $ticketQuantity)
     {
-        $tickets = $this->tickets()->available()->take($ticketQuantity)->get();
-        if ($tickets->count() < $ticketQuantity) {
+        $tickets = $this->findTickets($ticketQuantity);
+        return $this->createOrder($email, $tickets);
+    }
+
+    public function findTickets($quantity)
+    {
+        $tickets = $this->tickets()->available()->take($quantity)->get();
+
+        if ($tickets->count() < $quantity) {
             throw new NotEnoughTicketsException;
         }
 
-        $order = $this->orders()->create(['email' => $email]);
-
-        
-        foreach ($tickets as $ticket) {
-            $order->tickets()->save($ticket);
-        }
-        return $order;
+        return $tickets;
     }
-    public function tickets()
+
+    public function createOrder($email, $tickets)
     {
-        return $this->hasMany(Ticket::class);
+        return Order::forTickets($tickets, $email, $tickets->sum('price'));
     }
 
     public function addTickets($quantity)
@@ -59,20 +78,12 @@ class Concert extends Model
         foreach (range(1, $quantity) as $i) {
             $this->tickets()->create([]);
         }
-        
+
         return $this;
     }
+
     public function ticketsRemaining()
     {
         return $this->tickets()->available()->count();
-    }
-
-    public function hasOrderFor($customerEmail)
-    {
-        return $this->orders()->where('email', $customerEmail)->count() > 0;
-    }
-    public function ordersFor($customerEmail)
-    {
-        return $this->orders()->where('email', $customerEmail)->get();
     }
 }
