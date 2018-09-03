@@ -14,13 +14,13 @@ class Order extends Model
 		return $this->hasMany('App\Ticket');
 	}
 
-	public function cancel()
-	{
-		foreach ($this->tickets as $ticket) {
-			$ticket->release();
-		}
-		$this->delete();
-	}
+	// public function cancel()
+	// {
+	// 	foreach ($this->tickets as $ticket) {
+	// 		$ticket->release();
+	// 	}
+	// 	$this->delete();
+	// }
 
 	public function ticketQuantity()
 	{
