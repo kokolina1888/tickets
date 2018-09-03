@@ -5,6 +5,8 @@ use App\Billing\PaymentFailedException;
 class FakePaymentGateway implements PaymentGateway
 {
     private $charges;
+    private $beforeFirstChargeCallback;
+    
     public function __construct()
     {
         // dd($this->charges);
@@ -16,7 +18,12 @@ class FakePaymentGateway implements PaymentGateway
     }
     public function charge($amount, $token)
     {
-        // dd( $this->charges);
+        if ($this->beforeFirstChargeCallback !== null) {
+            $callback = $this->beforeFirstChargeCallback;
+            $this->beforeFirstChargeCallback = null;
+            $callback($this);
+        }
+
         if ($token !== $this->getValidTestToken()) {
 
             throw new PaymentFailedException;
@@ -31,5 +38,10 @@ class FakePaymentGateway implements PaymentGateway
     {
         // dd($this->charges);
         return $this->charges->sum();
+    }
+
+    public function beforeFirstCharge($callback)
+    {
+        $this->beforeFirstChargeCallback = $callback;
     }
 }
