@@ -32,9 +32,7 @@ class PurchaseTicketTest extends TestCase
             'email' => 'john@example.com',
             'ticket_quantity' => 3,
             'payment_token' => $this->paymentGateway->getValidTestToken(),
-            ]);
-        // Assert
-        $response->assertStatus(201);
+            ])->assertStatus(201);
         $response->assertJson([
             'email' => 'john@example.com',
             'ticket_quantity' => 3,
