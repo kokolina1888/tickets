@@ -14,22 +14,10 @@ class Order extends Model
 		return $this->hasMany('App\Ticket');
 	}
 
-	// public function cancel()
-	// {
-	// 	foreach ($this->tickets as $ticket) {
-	// 		$ticket->release();
-	// 	}
-	// 	$this->delete();
-	// }
-	// public static function fromReservation($reservation)
- //    {
- //        $order = self::create([
- //            'email' => $reservation->email(),
- //            'amount' => $reservation->totalCost(),
- //        ]);
- //        $order->tickets()->saveMany($reservation->tickets());
- //        return $order;
- //    }
+	public static function findByConfirmationNumber($confirmationNumber)
+    {
+        return self::where('confirmation_number', $confirmationNumber)->firstOrFail();
+    }
 
 	public function ticketQuantity()
 	{
