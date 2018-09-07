@@ -6,6 +6,7 @@ use App\Concert;
 use Tests\TestCase;
 use App\Billing\PaymentGateway;
 use App\Billing\FakePaymentGateway;
+use App\OrderConfirmationNumberGenerator;
 use Illuminate\Foundation\Testing\WithFaker;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Foundation\Testing\DatabaseMigrations;
@@ -25,6 +26,12 @@ class PurchaseTicketTest extends TestCase
     /** @test */
     function customer_can_purchase_tickets_to_a_published_concert()
     {
+        $this->withoutExceptionHandling();
+
+        $orderConfirmationNumberGenerator = \Mockery::mock(OrderConfirmationNumberGenerator::class, [
+            'generate' => 'ORDERCONFIRMATION1234',
+        ]);
+        $this->app->instance(OrderConfirmationNumberGenerator::class, $orderConfirmationNumberGenerator);
 
         $concert = factory(Concert::class)->states('published')->create(['ticket_price' => 3250])->addTickets(3);
 
@@ -33,11 +40,13 @@ class PurchaseTicketTest extends TestCase
             'quantity' => 3,
             'payment_token' => $this->paymentGateway->getValidTestToken(),
             ])->assertStatus(201);
-        // $response->assertJson([
-        //     'email' => 'john@example.com',
-        //     'quantity' => 3,
-        //     'amount' => 9750
-        //     ]);
+//!!!!!!!!!!!!!!!!!!!!!!!ticket_quantity
+        $response->assertJson([
+            'confirmation_number' => 'ORDERCONFIRMATION1234',
+            'email' => 'john@example.com',
+            'ticket_quantity' => 3,
+            'amount' => 9750
+            ]);
 
         // $this->assertJson($response->data);
         // Make sure the customer was charged the correct amount

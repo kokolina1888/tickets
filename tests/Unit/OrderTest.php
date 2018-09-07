@@ -21,7 +21,7 @@ class OrderTest extends TestCase
     {
         $order = factory(Order::class)->create([
             'confirmation_number' => 'ORDERCONFIRMATION1234',
-        ]);
+            ]);
         // dd($order);
         $foundOrder = Order::findByConfirmationNumber('ORDERCONFIRMATION1234');
         $this->assertEquals($order->id, $foundOrder->id);
@@ -37,21 +37,29 @@ class OrderTest extends TestCase
         $this->fail('No matching order was found for the specified confirmation number, but an exception was not thrown.');
     }
 
-	 /** @test */
+    /** @test */
     function converting_to_an_array()
     {
-        $concert = factory(Concert::class)->create(['ticket_price' => 1200])->addTickets(5);
-        $order = $concert->orderTickets('jane@example.com', 5);
+
+        $order = factory(Order::class)->create([
+            'confirmation_number' => 'ORDERCONFIRMATION1234',
+            'email' => 'jane@example.com',
+            'amount' => 6000,
+            ]);
+        $order->tickets()->saveMany(factory(Ticket::class)->times(5)->create());
+
         $result = $order->toArray();
+
         $this->assertEquals([
+            'confirmation_number' => 'ORDERCONFIRMATION1234',
             'email' => 'jane@example.com',
             'ticket_quantity' => 5,
             'amount' => 6000,
-        ], $result);
+            ], $result);
     }
 
-        /** @test */
-     function creating_an_order_from_tickets_email_and_amount()
+    /** @test */
+    function creating_an_order_from_tickets_email_and_amount()
     {
         $concert = factory(Concert::class)->create()->addTickets(5);
         $this->assertEquals(5, $concert->ticketsRemaining());
