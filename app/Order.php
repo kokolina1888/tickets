@@ -35,9 +35,11 @@ class Order extends Model
 	{
 		return [
 		'confirmation_number' => $this->confirmation_number,
-		'email' => $this->email,
-		'ticket_quantity' => $this->ticketQuantity(),
+		'email' => $this->email,		
 		'amount' => $this->amount,
+		'tickets' => $this->tickets->map(function ($ticket) {
+                return ['code' => $ticket->code];
+            })->all(),
 		];
 	}
 	public static function forTickets($tickets, $email, $charge)
@@ -49,11 +51,15 @@ class Order extends Model
             'card_last_four' => $charge->cardLastFour(),
 			]);
 
-		// dd($order);
-		
+		//dd($order);
+		$key = 1;
+		//$tickets->each->claimFor($order, $key);
 		foreach ($tickets as $ticket) {
-			$order->tickets()->save($ticket);
+			$ticket->claimFor($order, $key);
+			$key++;
 		}
+
+
 		return $order;
 	}
 

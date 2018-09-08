@@ -2,7 +2,10 @@
 
 namespace App\Providers;
 
+use App\Facades\TicketCode;
+use App\TicketCodeGenerator;
 use App\Billing\PaymentGateway;
+use App\TicketCodeNumberGenerator;
 use App\Billing\StripePaymentGateway;
 use Illuminate\Support\Facades\Schema;
 use Illuminate\Support\ServiceProvider;
@@ -33,5 +36,6 @@ class AppServiceProvider extends ServiceProvider
         });
         $this->app->bind(PaymentGateway::class, StripePaymentGateway::class);
         $this->app->bind(OrderConfirmationNumberGenerator::class, RandomOrderConfirmationNumberGenerator::class);
+        $this->app->bind(TicketCodeGenerator::class,TicketCodeNumberGenerator::class);
     }
 }

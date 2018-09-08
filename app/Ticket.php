@@ -4,6 +4,7 @@ namespace App;
 
 use App\Concert;
 use Carbon\Carbon;
+use App\Facades\TicketCode;
 use Illuminate\Database\Eloquent\Model;
 
 class Ticket extends Model
@@ -33,5 +34,14 @@ class Ticket extends Model
     {
         return $this->concert->ticket_price;
     }
+
+    public function claimFor($order, $number = null)
+    {
+
+        $this->code = TicketCode::generate($number);
+        //dd($this->code);
+        $order->tickets()->save($this);
+    }
+
 }
 
