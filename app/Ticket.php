@@ -35,10 +35,10 @@ class Ticket extends Model
         return $this->concert->ticket_price;
     }
 
-    public function claimFor($order, $number = null)
+    public function claimFor($order)
     {
 
-        $this->code = TicketCode::generate($number);
+        $this->code = TicketCode::generateFor($this);
         //dd($this->code);
         $order->tickets()->save($this);
     }

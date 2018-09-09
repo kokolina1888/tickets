@@ -167,6 +167,7 @@ return [
          * Package Service Providers...
          */
         Zondicons\ZondiconsServiceProvider::class,
+         Laravel\Tinker\TinkerServiceProvider::class,
 
         /*
          * Application Service Providers...
@@ -226,5 +227,7 @@ return [
         'View' => Illuminate\Support\Facades\View::class,
 
     ],
+
+    'ticket_code_salt' => env('TICKET_CODE_SALT'),
 
 ];

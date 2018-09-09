@@ -43,7 +43,7 @@ class TicketTest extends TestCase
     {
         $order = factory(Order::class)->create();
         $ticket = factory(Ticket::class)->create(['code' => null]);
-        TicketCode::shouldReceive('generate')->andReturn('TICKETCODE1');
+        TicketCode::shouldReceive('generateFor')->andReturn('TICKETCODE1');
 
         $ticket->claimFor($order);
 

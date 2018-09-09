@@ -102,7 +102,7 @@
                      payment_token: token.id,
                  }).then(response => {
                      //window.location.href = response.body.url
-                     console.log('charged')
+                     window.location = `/LC/tickets/public/orders/${response.data.confirmation_number}`
                  }).catch(response => {
                      this.processing = false
                  })

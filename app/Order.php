@@ -52,12 +52,12 @@ class Order extends Model
 			]);
 
 		//dd($order);
-		$key = 1;
-		//$tickets->each->claimFor($order, $key);
-		foreach ($tickets as $ticket) {
-			$ticket->claimFor($order, $key);
-			$key++;
-		}
+		// $key = 1;
+		$tickets->each->claimFor($order);
+		// foreach ($tickets as $ticket) {
+		// 	$ticket->claimFor($order, $key);
+		// 	$key++;
+		// }
 
 
 		return $order;
