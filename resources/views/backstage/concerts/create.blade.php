@@ -22,7 +22,7 @@
         <h1 class="text-lg">Add a concert</h1>
     </div>
 </div>
-<form class="bg-soft p-xs-y-5" action="/backstage/concerts" method="POST">
+<form class="bg-soft p-xs-y-5" action="{{url('/backstage/concerts')}}" method="POST">
     {{ csrf_field() }}
     @if ($errors->any())
     <div class="container m-xs-b-4">
