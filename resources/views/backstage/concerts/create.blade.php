@@ -5,7 +5,7 @@
         <div class="container">
             <div class="navbar-content">
                 <div>
-                    <img src="/img/logo.svg" alt="TicketBeast" style="height: 2.5rem;">
+                    <img src="{{asset('/img/logo.svg')}}" alt="TicketBeast" style="height: 2.5rem;">
                 </div>
                 <div>
                     <form class="inline-block" action="{{ route('auth.logout') }}" method="POST">

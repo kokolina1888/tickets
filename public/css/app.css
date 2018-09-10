@@ -1881,6 +1881,10 @@ select.form-control {
   color: #29363d;
   vertical-align: text-bottom;
 }
+.zondicon-sm {
+  height: 1em;
+  width: 1em;
+}
 .alert {
   padding: 1rem 1.5rem;
   background-color: #fff;
