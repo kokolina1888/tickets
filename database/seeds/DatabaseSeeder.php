@@ -25,5 +25,7 @@ class DatabaseSeeder extends Seeder
             'ticket_price' => 3250,
             'additional_information' => "This concert is 19+.",
         ])->addTickets(10);
+
+        factory(App\User::class)->create();
     }
 }

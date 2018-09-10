@@ -4,7 +4,7 @@
 <div class="container-fluid bg-soft">
     <div class="full-height flex-center">
         <div class="constrain constrain-sm flex-fit">
-            <form class="card p-xs-6" action="/login" method="POST">
+            <form class="card p-xs-6" action="{{url('/login')}}" method="POST">
                 {{ csrf_field() }}
                 <h1 class="text-xl wt-light text-center m-xs-b-6">Log in to your account</h1>
                 <div class="form-group">

@@ -1881,6 +1881,37 @@ select.form-control {
   color: #29363d;
   vertical-align: text-bottom;
 }
+.alert {
+  padding: 1rem 1.5rem;
+  background-color: #fff;
+  border-width: 1px;
+  border-style: solid;
+  border-radius: 0.25rem;
+}
+.alert-danger {
+  background-color: #fffafa;
+  border-color: #d95550;
+}
+.bullet-list {
+  list-style-type: disc;
+  padding-left: 2.5rem;
+}
+.bullet-list > li {
+  margin-bottom: 0.5rem;
+}
+.bullet-list > li:last-child {
+  margin-bottom: 0;
+}
+.numbered-list {
+  list-style-type: decimal;
+  padding-left: 2rem;
+}
+.numbered-list > li {
+  margin-bottom: 0.5rem;
+}
+.numbered-list > li:last-child {
+  margin-bottom: 0;
+}
 [v-cloak] .v-cloak-block {
   display: block;
 }

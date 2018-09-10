@@ -1,0 +1,32 @@
+/** @test */
+    function customer_can_purchase_tickets_to_a_published_concert()
+    {
+        $this->disableExceptionHandling();
+
+        OrderConfirmationNumber::shouldReceive('generate')->andReturn('ORDERCONFIRMATION1234');
+
+        $concert = factory(Concert::class)->states('published')->create(['ticket_price' => 3250])->addTickets(3);
+
+        $this->orderTickets($concert, [
+            'email' => 'john@example.com',
+            'ticket_quantity' => 3,
+            'payment_token' => $this->paymentGateway->getValidTestToken(),
+        ]);
+
+        $this->assertResponseStatus(201);
+
+        $this->seeJsonSubset([
+            'confirmation_number' => 'ORDERCONFIRMATION1234',
+            'email' => 'john@example.com',
+            'amount' => 9750,
+            'tickets' => [
+                ['code' => 'TICKETCODE1'],
+                ['code' => 'TICKETCODE2'],
+                ['code' => 'TICKETCODE3'],
+            ]
+        ]);
+
+        $this->assertEquals(9750, $this->paymentGateway->totalCharges());
+        $this->assertTrue($concert->hasOrderFor('john@example.com'));
+        $this->assertEquals(3, $concert->ordersFor('john@example.com')->first()->ticketQuantity());
+    }

@@ -8,6 +8,7 @@ use App\Billing\PaymentGateway;
 use App\TicketCodeNumberGenerator;
 use App\HashidsTicketCodeGenerator;
 use App\Billing\StripePaymentGateway;
+use Laravel\Dusk\DuskServiceProvider;
 use Illuminate\Support\Facades\Schema;
 use Illuminate\Support\ServiceProvider;
 use App\OrderConfirmationNumberGenerator;
@@ -32,14 +33,17 @@ class AppServiceProvider extends ServiceProvider
      */
     public function register()
     {
-         $this->app->bind(StripePaymentGateway::class, function () {
-            return new StripePaymentGateway(config('services.stripe.secret'));
-        });
-        $this->app->bind(HashidsTicketCodeGenerator::class, function () {
-            return new HashidsTicketCodeGenerator(config('app.ticket_code_salt'));
-        });
-        $this->app->bind(PaymentGateway::class, StripePaymentGateway::class);
-        $this->app->bind(OrderConfirmationNumberGenerator::class, RandomOrderConfirmationNumberGenerator::class);
-        $this->app->bind(TicketCodeGenerator::class,HashidsTicketCodeGenerator::class);
+    if ($this->app->environment('local', 'testing')) {
+        $this->app->register(DuskServiceProvider::class);
     }
+    $this->app->bind(StripePaymentGateway::class, function () {
+        return new StripePaymentGateway(config('services.stripe.secret'));
+    });
+    $this->app->bind(HashidsTicketCodeGenerator::class, function () {
+        return new HashidsTicketCodeGenerator(config('app.ticket_code_salt'));
+    });
+    $this->app->bind(PaymentGateway::class, StripePaymentGateway::class);
+    $this->app->bind(OrderConfirmationNumberGenerator::class, RandomOrderConfirmationNumberGenerator::class);
+    $this->app->bind(TicketCodeGenerator::class,HashidsTicketCodeGenerator::class);
+}
 }
