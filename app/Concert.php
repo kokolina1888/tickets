@@ -19,6 +19,7 @@ class Concert extends Model
     public function isPublished()
     {
         return $this->published_at !== null;
+        $this->addTickets($this->ticket_quantity);
     }
     public function publish()
     {
