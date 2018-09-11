@@ -48,7 +48,7 @@
                             </p>
                         </div>
                         <div class="text-right">
-                            <a href="#" class="btn btn-secondary btn-block">Edit</a>
+                            <a href="{{ route('backstage.concerts.edit', $concert->id) }}" class="btn btn-secondary btn-block">Edit</a>
                         </div>
                     </div>
                 </div>
